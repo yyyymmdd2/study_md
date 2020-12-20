@@ -101,4 +101,108 @@ Buffer.byteLength(string[, encoding])
 Buffer.concat(list[,totalLength])
 ```
 
-## 
+## path模块
+
+```javascript
+// basename用于获取路径的最后一个组成部分
+let res = path.basename('/a/b/index.html');	// html
+let res = path.basename('/a/b/index.html', ".html");	// .html
+
+// dirname用于获取路径中的目录，除最后一个部分以外的内容
+let res = path.dirname('/a/b/index.html');	// /a/b/
+
+// extname 用于获取路径中最后一个组成部分的扩展名
+let res = path.extname('/a/b/index.html');	// html
+
+// isAbsolute 判断路径是否是绝对路径  path.isAbsolute(路径)
+// linux	/开头是绝对路径    路径分隔符是左斜杠 /
+// windows  盘符开头是绝对路径   路径分隔符是右斜杠 \
+
+// path.sep 用于获取当前操作系统中路径的分隔符
+// Linux  /
+// Windows  \
+console.log(path.sep);
+
+// path.delimiter获取当前操作系统环境变量的分隔符
+// Linux   :
+// Window   ;
+console.log(path.delimiter);
+
+// path.parse(path): 将路径转换为对象
+console.log(path.parse("/a/b/c/index.js"));
+/*
+{
+  root: '/',
+  dir: '/a/b/c',
+  base: 'index.js',
+  ext: '.js',
+  name: 'index'
+}
+*/
+
+// path.format(pathObject)：将对象转换为路径
+console.log(path.format({
+    root: '/',
+    dir: '/a/b',
+    base: 'index.html',
+    ext: '.html',
+    name: 'index'
+}));
+// /a/b\index.html
+
+// path.join([...paths])  用于拼接路径   如果参数有..  上一级目录
+
+// path.normalize(path)    规范化路径
+let res = path.normalize("/a//b///index.html")
+console.log(res);
+
+// path.relative(from, to)  计算相对路径
+let res = path.relative('/data/orandea/test/aaa', '/data/orandea/impl/bbb');
+console.log(res);	// ..\..\impl\bbb
+
+// path.resolve([...paths])  用于解析路径
+// 如果后面的参数是绝对路径，那么前面的参数忽略
+```
+
+## fs模块
+
+### 查看文件状态
+
+```javascript
+// fs.stat(path[, options], callback)
+// fs.statSync(path[, options])
+fs.stat(__dirname, (err, stats) => {
+   if (err) {
+       console.log("出错了");
+   } else {
+       //birthtime 文件的创建时间
+       // mtime: 文件的修改时间
+       console.log(stats);
+
+       if (stats.isFile()) {
+           console.log("是文件");
+       }else {
+           console.log("是文件夹")
+       }
+   }
+});
+```
+
+### 文件读取
+
+```javascript
+// fs.readFile(path[, options], callback)
+// fs.readFileSync(path[, options])
+// 没有指定第二个参数，默认会将读取的数据放在Buffer中
+// 第二个参数指定为utf8，返回的数据就是字符串
+fs.readFile(path.join(__dirname, "data.txt"), (err, data) => {
+    if (err) {
+        console.log("有错");
+    } else {
+        console.log(data.toString());
+    }
+});
+```
+
+### 写入文件
+
