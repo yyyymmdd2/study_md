@@ -206,3 +206,95 @@ fs.readFile(path.join(__dirname, "data.txt"), (err, data) => {
 
 ### 写入文件
 
+```javascript
+// fs.writeFile(file, data[, options], callback)
+// fs.writeFileSync(file, data[, options])
+fs.writeFile(path.join(__dirname, "1.txt"), Buffer.from("fafgasg"), (err) => {
+    if (err) {
+        console.log("出错了");
+    } else {
+        console.log("成功写入文件");
+    }
+});
+```
+
+### 追加数据
+
+```javascript
+// fs.appendFile(path, data[, options], callback)
+// fs.appendFileSync(path, data[, options])
+```
+
+### 文件流
+
+```javascript
+// fs.createReadStream(path[, options])
+// fs.createWriteStream(path[, options])
+```
+
+### 目录操作
+
+```javascript
+// 1、创建目录
+fs.mkdir(path[, options], callback)
+fs.mkdirSync(path[, options])
+
+// 2、读取目录
+fs.readdir(path[, options], callback)
+fs.readdirSync(path[, options])
+
+//3、删除目录
+fs.rmdir(path[, options], callback)
+fs.rmdirSync(path[, options])
+```
+
+## http模块
+
+### 创建服务器
+
+```javascript
+//1、创建一个服务器实列对象
+let server = http.createServer();
+//2. 注册请求监听
+server.on("request", (req, res) => {
+    /*
+    req.url		请求的url  可用url模块解析
+    req.method	以什么方式请求的
+    */
+    
+    /*
+    获取post请求数据
+    首先req，res本质都是流
+    流一般可以用on方法箭头事件
+        //定义变量保存传递过来的参数
+        let arr = [];
+        //POST请求需要分批获取
+        req.on("data", chunk => {
+            arr.push(chunk);
+        });
+        req.on("end", () => {
+            // console.log(str)
+            res.end(Buffer.from(arr));
+        });
+    */
+
+    //告诉浏览器返回的数据是什么类型，返回的数据需要用什么字符集解析
+    res.writeHead(200, {
+       "Content-Type": "text/plain; charset=utf-8"
+    });
+    // 结束本次请求并且返回数据
+    res.end("发射点发");
+});
+
+server.listen(8080);	// 监听端口号
+```
+
+## querystring模块
+
+```javascript
+// 将参数转换为对象
+querystring.parse(str[, sep[, eq[, options]]])
+// 将对象转换为参数
+querystring.stringify(obj[, sep[, eq[, options]]])
+```
+
